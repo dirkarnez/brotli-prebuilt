@@ -40,19 +40,19 @@ jobs:
             cmake.exe -G "MinGW Makefiles" ^
             -DCMAKE_BUILD_TYPE=Release ^
             -DBUILD_SHARED_LIBS=OFF ^
-            -DCMAKE_INSTALL_PREFIX="build/${{ env.cmakeInstallationPath }}" -B./build &&^
-            cd build && cmake --build . && cmake --install . 
+            -DCMAKE_INSTALL_PREFIX="cmake-build/${{ env.cmakeInstallationPath }}" -B./cmake-build &&^
+            cd cmake-build && cmake --build . && cmake --install . 
             
       - name: Archive Release
         uses: thedoctor0/zip-release@master
         with:
           type: 'zip'
-          directory: "brotli/build/${{ env.cmakeInstallationPath }}"
+          directory: "brotli/cmake-build/${{ env.cmakeInstallationPath }}"
           filename: "${{ env.mingwTargetZip }}"
           
       - name: Release prebuilt
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "brotli/build/${{ env.cmakeInstallationPath }}/${{ env.mingwTargetZip }}"
+          artifacts: "brotli/cmake-build/${{ env.cmakeInstallationPath }}/${{ env.mingwTargetZip }}"
           allowUpdates: true
           token: ${{ secrets.GITHUB_TOKEN }}
